@@ -18,7 +18,7 @@ var renders = {
   },
   '+': function (variable, html) {// number
     var results = [];
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < variable; i++) {
       results.push(html(i));
     }
     return results;
