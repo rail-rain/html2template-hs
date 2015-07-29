@@ -1,0 +1,24 @@
+{
+  "name": "html2template-hs",
+  "main": "index,js",
+  "version": "0.1.0",
+  "author": {
+    "name": "rail-rain"
+  },
+  "description": "converted html into the template hyperscript",
+  "keywords": [
+    "html",
+    "template",
+    "hyperscript",
+    "hscript"
+  ],
+  "repository": "https://github.com/rail-rain/html2template-hs",
+  "license": "MIT",
+  "engines": [
+    "node",
+    "browser + require"
+  ],
+  "dependencies": {
+    "html2hscript": "^1.0.6"
+  }
+}
