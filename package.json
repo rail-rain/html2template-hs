@@ -1,7 +1,7 @@
 {
   "name": "html2template-hs",
   "main": "index.min.js",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": {
     "name": "rail-rain"
   },
@@ -18,11 +18,5 @@
     "node",
     "browser + require"
   ],
-  "scripts": {
-    "build": "browserify src/index.js -o dist/index.js"
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "browserify": "^11.0.1"
-  }
+  "dependencies": {}
 }
