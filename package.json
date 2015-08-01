@@ -18,5 +18,8 @@
     "node",
     "browser + require"
   ],
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "hyperscript": "^1.4.6"
+  }
 }

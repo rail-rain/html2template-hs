@@ -1,64 +1,55 @@
-var tagRegexp = /^(.*?)<([\w-]+?)(\s[^>]*)?>(.*?)(<\/\1>)?$/,
-    textnodeKey = 1,
-    tagNameKey = 2,
-    attributesKey = 3,
-    fragmentKey = 4,
-    tagCloseKey = 5;
-
-var parse = function (matchData) {
+var htmlSpliter = /(<\/?[\w-]+?(?:\s[^>]*)?>)/,
+  tagSpliter = /^<(\/?[\w-]+)(\s[^>]*)?>$/;
   
-  var attributes = matchData[attributesKey];
-  if (attributes) {
-    attributes = attributes
-    .replace(/ ([\w-]+?)="(.+?)"/g, ",\"$1\":\"$2\"")
-    .substr(1);
-  }
-  var children = fragmentParse(matchData[fragmentKey]);
-  
-  return "h(\"" + matchData[tagNameKey] + "\""
-  + (attributes ? ",{" + attributes + "}" : "")
-  + (children ? ",[" + children.toString() + "]" : "")
-  + ")";
+var arrayLastItem = function (array) {
+  return array[array.length - 1];
 };
 
-var fragmentParse = function (fragment) {
-  if (!fragment) {
-    return null;
-  }
-  var matchData = fragment.match(tagRegexp);
-  if (!matchData) {
-    return JSON.stringify(fragment);
-  }
-  var children = [];
-  
-  if (matchData[textnodeKey]) {
-    children.push(JSON.stringify(matchData[textnodeKey]));
+var tagOpen = function(name, attributes, chidrenArray) {
+  if (attributes) {
+    attributes = attributes
+      .replace(/ ([\w-]+?)="(.+?)"/g, ",\"$1\":\"$2\"")
+      .substr(1);
   }
   
-  if (matchData[tagCloseKey]) {
-    children.push(parse(matchData));
-    return children;
+  chidrenArray.push([]);
+
+  return "h(\"" + name + "\""
+  + (attributes ? ",{" + attributes + "}" : "");
+};
+
+var tagClose = function(chidrenArray) {
+  var children = arrayLastItem(chidrenArray);
+  var childrenLength = children.length;
+  var childrenString = children.toString();
+  chidrenArray.pop();
+  return (childrenLength ? "[" + childrenString + "]" : "") + ")";
+};
+
+var fragmentParse = function(fragment, chidrenArray) {
+  var match = fragment.match(tagSpliter);
+  if (!match) {
+    arrayLastItem(chidrenArray).push(JSON.stringify(fragment));
+  } else if (!match[1].search("/")) {
+    chidrenArray[chidrenArray.length - 2].push(tagClose(chidrenArray));
+  } else{
+  arrayLastItem(chidrenArray).push(tagOpen(
+    match[1],
+    match[2],
+    chidrenArray
+  ))
   }
-  
-  var fragments = matchData[fragmentKey].split("</" + matchData[tagNameKey] + ">");
-  if (fragments.length === 2) { 
-    matchData[fragmentKey] = fragments[0];
-  } else {
-    matchData[fragmentKey] = null;
-  }
-  children.push(parse(matchData));
-  
-  var anotherChild;  
-  if (fragments.length === 2) { 
-    anotherChild = fragments[1];
-  } else {
-    anotherChild = fragments[0];
-  }
-  children.push(fragmentParse(anotherChild));
-  
-  return children.filter(function (current) {return current});
+};
+
+var parseStarter = function(html) {
+  var fragments = [[]];
+  html.split(htmlSpliter)
+    .forEach(function(current) {
+      if (current) {
+        fragmentParse(current, fragments);
+      }
+    });
+  return fragments[0].toString();
 }
 
-module.exports =  function (rootHtml) {
-  return fragmentParse(rootHtml)[0];
-}
+module.exports = parseStarter;
