@@ -23,11 +23,11 @@ var renders = {
   }
 };
 
-var htmlParser = require('./htmlParser.js');
+var html2hs = require('./htmlParser');
 
 module.exports = function (html, h) {
 
-  var hscript = htmlParser(html);
+  var hscript = html2hs(html);
   return new Function('r', 'h', 'o', 'return ' + hscript
     .replace(/{{([\#\?\^\+\/]?)(.+?)}}/g, '{{$1o.$2}}')
     .replace(/"{{([\#\?\^\+])(.+?)}}",/g, 'r["$1"]($2,function(v){return ')

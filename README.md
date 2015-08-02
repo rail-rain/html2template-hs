@@ -5,18 +5,17 @@ converted html into the mustache like template hyperscript !
 ## demo
 
 ``` js
-var html2hs = require('html2template-hs');
+var html2ths = require('html2template-hs');
 var h = require('hyperscript');
 var obj = {
   greeting: "hello!"
 };
 
-html2hs(
+var hscript = html2ths(
   '<span>{{greeting}}</span>',
-  h, function (hscript) {
+  h);
   console.log(hscript(obj).outerHTML);
    // <span>hello!</span>
-});
 ```
 
 ## api
@@ -28,19 +27,18 @@ var obj = {
   flag: false
 };
 
-html2hs(
-  '<div>' +
-    '{{?flag}}' +
-      '<span>hello</span>' +
-    '{{/flag}}' +
-    '<span>world</span>' +
-  '</div>',
-  h, function (hscript) {
-  console.log(hscript(obj).outerHTML);
+var hscript = html2ths(
+    '<div>' +
+      '{{?flag}}' +
+        '<span>hello</span>' +
+      '{{/flag}}' +
+      '<span>world</span>' +
+    '</div>',
+  h);
+  console.log(hscript);
    // <div>
    //   <span>world</span>
    // </div>
-});
 ```
 
 ####reverse if
@@ -49,20 +47,19 @@ var obj = {
   flag: false
 };
 
-html2hs(
+var hscript = html2ths(
   '<div>' +
     '{{^flag}}' +
       '<span>hello</span>' +
     '{{/flag}}' +
     '<span>world</span>' +
   '</div>',
-  h, function (hscript) {
+  h)
   console.log(hscript(obj).outerHTML);
   // <div>
   //   <span>hello</span>
   //   <span>world</span>
   // </div>
-});
 ```
 
 ####array repeat
@@ -71,19 +68,18 @@ var obj = {
   items: ['hello', 'world']
 };
 
-html2hs(
+var hscript = html2ths(
   '<div>' +
-    '{{#items}}' +
+    '{{#array}}' +
       '<span>{{.}}</span>' +
-    '{{/items}}' +
+    '{{/array}}' +
   '</div>',
-  h, function (hscript) {
+  h);
   console.log(hscript(obj).outerHTML);
   // <div>
   //   <span>hello</span>
   //   <span>world</span>
   // </div>
-});
 ```
 
 ####object in array repeat
@@ -95,19 +91,18 @@ var obj = {
   ]
 };
 
-html2hs(
+var hscript = html2ths(
   '<div>' +
-    '{{#items}}' +
+    '{{#object}}' +
       '<span>{{.greeting}}</span>' +
-    '{{/items}}' +
+    '{{/object}}' +
   '</div>',
-  h, function (hscript) {
+  h);
   console.log(hscript(obj).outerHTML);
   // <div>
   //   <span>hello</span>
   //   <span>world</span>
   // </div>
-});
 ```
 
 ####number repeat
@@ -116,18 +111,17 @@ var obj = {
   items: 3
 };
 
-html2hs(
+var hscript = html2ths(
   '<div>' +
-    '{{+items}}' +
+    '{{+number}}' +
       '<span>{{.}}</span>' +
-    '{{/items}}' +
+    '{{/number}}' +
   '</div>',
-  h, function (hscript) {
+  h);
   console.log(hscript(obj).outerHTML);
   // <div>
   //   <span>0</span>
   //   <span>1</span>
   //   <span>2</span>
   // </div>
-});
 ```
