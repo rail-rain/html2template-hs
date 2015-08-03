@@ -1,6 +1,5 @@
 describe('html2hs', function () {
   var html2hs = require('../src/htmlParser.js');
-  var h = require('hyperscript');
   
   it('base', function () {
     expect(html2hs(
@@ -16,7 +15,7 @@ describe('html2hs', function () {
         '<input type="text">' +
         '<span>foo</span>' +
       '</div>'
-    )).toBe('h("div",[h("input",{"type":"text"}),h("span",["foo"])])');
+    )).toBe('h("div",[h("input",{attributes:{"type":"text"}}),h("span",["foo"])])');
   });
   
   it('non children', function () {
@@ -135,5 +134,6 @@ describe("html2ths", function() {
         '<span>2</span>' +
       '</div>');
   });
+  
 
 });

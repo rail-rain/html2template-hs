@@ -31,7 +31,7 @@ var TagParse = function (root, name, attributes, children) {
   }
 
   return "h(\"" + name + "\""
-  + (attributes ? ",{" + attributes + "}" : "")
+  + (attributes ? ",{attributes:{" + attributes + "}}" : "")
   + (children ? ",[" + children + "]" : "") + ")";
 };
 
