@@ -25,10 +25,18 @@ describe('html2hs', function () {
       '</div>'
     )).toBe('h("div",[h("span",["foo"])])');
   });
+  
+  it('whitespace and paragraph', function () {
+    expect(html2hs(
+      '  <div>\n' +
+        '{{foo}}  <span>  foo</span>\n' +
+      '  </div>  '
+    )).toBe('h("div",["{{foo}}",h("span",["  foo"])])');
+  });
 });
 
 describe("html2ths", function() {
-  var html2ths = require('../dist/index.js');
+  var html2ths = require('../src/index.js');
   var h = require('hyperscript');
   var obj = {
     greeting: "hello!",
