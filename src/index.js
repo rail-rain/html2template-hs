@@ -29,9 +29,9 @@ module.exports = function (html, h) {
 
   var hscript = html2hs(html);
   return new Function('r', 'h', 'o', 'return ' + hscript
-    .replace(/{{([\#\?\^\+\/]?)(.+?)}}/g, '{{$1o.$2}}')
-    .replace(/"{{([\#\?\^\+])(.+?)}}",/g, 'r["$1"]($2,function(v){return ')
+    .replace(/"{{([\#\?\^\+])(.+?)}}",/g, 'r["$1"](o.$2,function(v){return ')
     .replace(/,"{{\/.+?}}"/g, '})')
+    .replace(/{{(.+?)}}/g, '{{o.$1}}')
     .replace(/{{o\.\.}}/g, "{{v}}")
     .replace(/{{o\.\.(.+?)}}/g, "{{v.$1}}")
     .replace(/("{{|}}")/g, '')

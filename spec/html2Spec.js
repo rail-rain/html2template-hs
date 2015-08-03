@@ -1,5 +1,14 @@
 describe('html2hs', function () {
   var html2hs = require('../src/htmlParser.js');
+  var h = require('hyperscript');
+  
+  it('base', function () {
+    expect(html2hs(
+      '<div>' +
+        '<span>foo</span>' +
+      '</div>'
+    )).toBe('h("div",[h("span",["foo"])])');
+  });
   
   it('non close tag', function () {
     expect(html2hs(
@@ -33,6 +42,7 @@ describe('html2hs', function () {
       '  </div>  '
     )).toBe('h("div",["{{foo}}",h("span",["  foo"])])');
   });
+  
 });
 
 describe("html2ths", function() {
