@@ -37,9 +37,9 @@ describe('html2hs', function () {
   it('whitespace and paragraph', function () {
     expect(html2hs(
       '  <div>\n' +
-        '{{foo}}  <span>  foo</span>\n' +
+        '{{foo}}  <span> foo</span>\n' +
       '  </div>  '
-    )).toBe('h("div",["{{foo}}",h("span",["  foo"])])');
+    )).toBe('h("div",["{{foo}} ",h("span",[" foo"])])');
   });
   
 });
@@ -59,23 +59,30 @@ describe("html2ths", function() {
   };
 
   it("base", function() {
-    expect(html2ths(
+    expect(html2ths.compile(
       '<span>{{greeting}}</span>',
       h)(obj).outerHTML)
       .toBe('<span>hello!</span>');
   });
   
   it('variables', function () {
-    expect(html2ths(
+    expect(html2ths.compile(
       '<span>(greeting : {{greeting}})</span>',
       h)(obj).outerHTML)
       .toBe('<span>(greeting : hello!)</span>');
   });
   
+  it('nest', function () {
+    expect(html2ths.compile(
+      '<span>{{object[0].greeting}}</span>',
+      h)(obj).outerHTML)
+      .toBe('<span>hello</span>');
+  });
+  
   it('if', function () {
-    expect(html2ths(
+    expect(html2ths.compile(
       '<div>' +
-        '{{?flag}}' +
+        '{{#if flag}}' +
           '<span>hello</span>' +
         '{{/flag}}' +
         '<span>world</span>' +
@@ -84,10 +91,10 @@ describe("html2ths", function() {
       .toBe('<div><span>world</span></div>');
   });
   
-  it('reverse if', function () {
-    expect(html2ths(
+  it('unless', function () {
+    expect(html2ths.compile(
       '<div>' +
-        '{{^flag}}' +
+        '{{#unless flag}}' +
           '<span>hello</span>' +
         '{{/flag}}' +
         '<span>world</span>' +
@@ -100,9 +107,9 @@ describe("html2ths", function() {
   });
   
   it('array repeat', function () {
-    expect(html2ths(
+    expect(html2ths.compile(
       '<div>' +
-        '{{#array}}' +
+        '{{#each array}}' +
           '<span>{{.}}</span>' +
         '{{/array}}' +
       '</div>',
@@ -114,9 +121,9 @@ describe("html2ths", function() {
   });
   
   it('object in array repeat', function () {
-    expect(html2ths(
+    expect(html2ths.compile(
       '<div>' +
-        '{{#object}}' +
+        '{{#each object}}' +
           '<span>{{.greeting}}</span>' +
         '{{/object}}' +
       '</div>',
@@ -127,20 +134,60 @@ describe("html2ths", function() {
       '</div>');
   });
   
-  it('number repeat', function () {
-    expect(html2ths(
+  it('if2', function () {
+    expect(html2ths.compile(
       '<div>' +
-        '{{+number}}' +
-          '<span>{{.}}</span>' +
-        '{{/number}}' +
+        '{{#unless flag}}' +
+          '<span>hello</span>' +
+          '<span>!</span>' +
+        '{{/flag}}' +
+        '<span>world</span>' +
       '</div>',
-      h)(obj).outerHTML).toBe(
-      '<div>' +
-        '<span>0</span>' +
-        '<span>1</span>' +
-        '<span>2</span>' +
-      '</div>');
+      h)(obj).outerHTML)
+      .toBe('<div><span>hello</span><span>!</span><span>world</span></div>');
   });
   
-
+  beforeEach(function() {
+    html2ths.registerHelper("foo", function (greeting, html) {
+      return html(greeting);
+    });
+  });
+  
+  it('registe helper', function () {
+    expect(html2ths.compile(
+      '<div>' +
+        '{{#foo greeting}}' +
+          '<span>{{.}}</span>' +
+          '<span>world</span>' +
+        '{{/foo}}' +
+      '</div>',
+      h)(obj).outerHTML)
+      .toBe('<div><span>hello!</span><span>world</span></div>');
+  });
+  
+  it('if else', function () {
+    expect(html2ths.compile(
+      '<div>' +
+        '{{#if flag}}' +
+          '<span>{{greeting}}</span>' +
+        '{{else}}' +
+          '<span>world</span>' +
+        '{{/flag}}' +
+      '</div>',
+      h)(obj).outerHTML)
+      .toBe('<div><span>world</span></div>');
+  });
+  
+  it('if else', function () {
+    expect(html2ths.compile(
+      '<div>' +
+        '{{#each arrayNot}}' +
+          '<span>{{.}}</span>' +
+        '{{else}}' +
+          '<span>not</span>' +
+        '{{/arrayNot}}' +
+      '</div>',
+      h)(obj).outerHTML)
+      .toBe('<div><span>not</span></div>');
+  });
 });

@@ -1,21 +1,11 @@
 var htmlSpliter = /(<([\w-]+)(?:\s[^>]*)?>(?:.*?<\/\2>)?|[^<]+)/g,
   tagSpliter = /^<([\w-]+)(\s[^>]*)?>(.*?)(?:<\/\1>)?$/;
-  
-var nonTrimTags = ['span', 'script', 'style', 'pre', 'textarea',
-      'a', 'abbr', 'acronym','b', 'bdi', 'bdo', 'big', 'button',
-      'cite','code', 'del', 'dfn', 'em', 'font', 'i', 'ins', 'kbd',
-      'mark', 'q','rt', 'rp', 's', 'samp', 'small', 'strike', 'strong',
-      'sub', 'sup', 'svg', 'time', 'tt', 'u', 'var'];
 
 var textParse = function (textNode, parent) {
-  
-  if (nonTrimTags.indexOf(parent) > -1) {
-    return JSON.stringify(textNode);
-  }
   if (/^\s+$/.test(textNode)) {
     return;
   }
-  return JSON.stringify(textNode.replace(/\s/g, ""));
+  return JSON.stringify(textNode.replace(/\s+/g, " "));
 };
 
 var TagParse = function (root, name, attributes, children) {

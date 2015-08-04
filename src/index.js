@@ -1,27 +1,31 @@
 (function () {
   "use strict";
-  var renders = {
-    '?': function (variable, html) {//if
-      if (variable) {
+
+  var html2hs = require('./htmlParser');
+  
+  var helpers = {
+    'if': function (flag, html, elseHtml) {
+      if (flag) {
         return html();
+      } else if (elseHtml) {
+        return elseHtml();
       }
     },
-    '^': function (variable, html) {// if !
-      if (!variable) {
+    'unless': function (flag, html, elseHtml) {
+      if (!flag) {
         return html();
+      } else if (elseHtml) {
+        return elseHtml();
       }
     },
-    '#': function (variable, html) {// array
-      return variable.map(function (current) {
-        return html(current);
-      });
-    },
-    '+': function (variable, html) {// number
-      var results = [];
-      for (var i = 0; i < variable; i++) {
-        results.push(html(i));
+    'each': function (array, html, elseHtml) {
+      if (array) {
+        return array.map(function (current) {
+          return html(current);
+        });
+      } else if (elseHtml) {
+        return elseHtml();
       }
-      return results;
     }
   };
 
@@ -44,18 +48,32 @@
     }
     return body;
   };
+  
+  var blockReplace = function (block, name, args) {
+    return 'r["' + name + '"]('
+    + args.split(" ")
+      .map(function (arg) {return 'o.' + arg})
+      .join(",") + ',function(v){return [';
+  };
 
-  var html2hs = require('./htmlParser');
-
-  module.exports = function (html, h) {
-
+  var compile = function (html, h) {
     var hscript = html2hs(html);
     
     return new Function('r', 'h', 'o', 'return ' + hscript
-      .replace(/"{{([\#\?\^\+])(.+?)}}",/g, 'r["$1"](o.$2,function(v){return ')
-      .replace(/,"{{\/.+?}}"/g, '})')
-      .replace(/"?{{(.+?)}}"?/g, mustacheReplace))
-      .bind(null, renders, h);
-  }
+      .replace(/"{{\#(\w+?) (.+?)}}",/g, blockReplace)
+      .replace(/,"{{\/\w+?}}"/g, ']})')
+      .replace(/,"{{else}}",/, ']},function(){return [')
+      .replace(/"?{{([.\w\[\]]+)}}"?/g, mustacheReplace))
+      .bind(null, helpers, h);
+  };
+  
+  var registerHelper = function (name, helper) {
+    helpers[name] = helper;
+  };
+  
+  module.exports = {
+    compile: compile,
+    registerHelper: registerHelper
+  };
 
 }());
