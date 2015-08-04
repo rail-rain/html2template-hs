@@ -26,6 +26,15 @@
   };
 
   var mustacheReplace = function (mustache, body) {
+    if (body.indexOf(".") === 0) {
+      if (body.length === 1) {
+        body = 'v';
+      } else {
+        body = 'v' + body;
+      }
+    } else {
+      body = 'o.' + body;
+    }
     
     if (mustache.indexOf('"') !== 0) {
       body = '"+' + body;
@@ -45,9 +54,6 @@
     return new Function('r', 'h', 'o', 'return ' + hscript
       .replace(/"{{([\#\?\^\+])(.+?)}}",/g, 'r["$1"](o.$2,function(v){return ')
       .replace(/,"{{\/.+?}}"/g, '})')
-      .replace(/{{(.+?)}}/g, '{{o.$1}}')
-      .replace(/{{o\.\.}}/g, "{{v}}")
-      .replace(/{{o\.\.(.+?)}}/g, "{{v.$1}}")
       .replace(/"?{{(.+?)}}"?/g, mustacheReplace))
       .bind(null, renders, h);
   }
