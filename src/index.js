@@ -49,20 +49,20 @@
     return body;
   };
   
-  var blockReplace = function (block, name, args) {
+  var helpersReplace = function (helper, isBlock, name, args) {
     return 'r["' + name + '"]('
     + args.split(" ")
       .map(function (arg) {return 'o.' + arg})
-      .join(",") + ',function(v){return [';
+      .join(",") + (isBlock ? ',function(v){return [' : ')');
   };
 
   var compile = function (html, h) {
     var hscript = html2hs(html);
     
     return new Function('r', 'h', 'o', 'return ' + hscript
-      .replace(/"{{\#(\w+?) (.+?)}}",/g, blockReplace)
-      .replace(/,"{{\/\w+?}}"/g, ']})')
-      .replace(/,"{{else}}",/, ']},function(){return [')
+      .replace(/"{{(\#)?(\w+) (.+?)}}",?/g, helpersReplace)
+      .replace(/,"{{\/\w+}}"/g, ']})')
+      .replace(/,"{{else}}",/g, ']},function(){return [')
       .replace(/"?{{([.\w\[\]]+)}}"?/g, mustacheReplace))
       .bind(null, helpers, h);
   };

@@ -84,7 +84,7 @@ describe("html2ths", function() {
       '<div>' +
         '{{#if flag}}' +
           '<span>hello</span>' +
-        '{{/flag}}' +
+        '{{/if}}' +
         '<span>world</span>' +
       '</div>',
       h)(obj).outerHTML)
@@ -96,7 +96,7 @@ describe("html2ths", function() {
       '<div>' +
         '{{#unless flag}}' +
           '<span>hello</span>' +
-        '{{/flag}}' +
+        '{{/unless}}' +
         '<span>world</span>' +
       '</div>',
       h)(obj).outerHTML).toBe(
@@ -111,7 +111,7 @@ describe("html2ths", function() {
       '<div>' +
         '{{#each array}}' +
           '<span>{{.}}</span>' +
-        '{{/array}}' +
+        '{{/each}}' +
       '</div>',
       h)(obj).outerHTML).toBe(
       '<div>' +
@@ -125,7 +125,7 @@ describe("html2ths", function() {
       '<div>' +
         '{{#each object}}' +
           '<span>{{.greeting}}</span>' +
-        '{{/object}}' +
+        '{{/each}}' +
       '</div>',
       h)(obj).outerHTML).toBe(
       '<div>' +
@@ -140,7 +140,7 @@ describe("html2ths", function() {
         '{{#unless flag}}' +
           '<span>hello</span>' +
           '<span>!</span>' +
-        '{{/flag}}' +
+        '{{/unless}}' +
         '<span>world</span>' +
       '</div>',
       h)(obj).outerHTML)
@@ -148,21 +148,37 @@ describe("html2ths", function() {
   });
   
   beforeEach(function() {
-    html2ths.registerHelper("foo", function (greeting, html) {
-      return html(greeting);
+    html2ths.registerHelper("for", function (number, html) {
+      var results = [];
+      for (var i = 0; i < number; i++) {
+        results.push(html(i));
+      }
+      return results;
     });
   });
   
   it('registe helper', function () {
     expect(html2ths.compile(
       '<div>' +
-        '{{#foo greeting}}' +
+        '{{#for number}}' +
           '<span>{{.}}</span>' +
-          '<span>world</span>' +
-        '{{/foo}}' +
+        '{{/for}}' +
       '</div>',
       h)(obj).outerHTML)
-      .toBe('<div><span>hello!</span><span>world</span></div>');
+      .toBe('<div><span>0</span><span>1</span><span>2</span></div>');
+  });
+  
+  beforeEach(function() {
+    html2ths.registerHelper("space", function (foo, bar) {
+      return foo + ' ' + bar;
+    });
+  });
+  
+  it('non block helpers', function () {
+    expect(html2ths.compile(
+        '<span>{{space array[0] array[1]}}</span>',
+      h)(obj).outerHTML)
+      .toBe('<span>hello world</span>');
   });
   
   it('if else', function () {
@@ -172,20 +188,20 @@ describe("html2ths", function() {
           '<span>{{greeting}}</span>' +
         '{{else}}' +
           '<span>world</span>' +
-        '{{/flag}}' +
+        '{{/if}}' +
       '</div>',
       h)(obj).outerHTML)
       .toBe('<div><span>world</span></div>');
   });
   
-  it('if else', function () {
+  it('each else', function () {
     expect(html2ths.compile(
       '<div>' +
         '{{#each arrayNot}}' +
           '<span>{{.}}</span>' +
         '{{else}}' +
           '<span>not</span>' +
-        '{{/arrayNot}}' +
+        '{{/each}}' +
       '</div>',
       h)(obj).outerHTML)
       .toBe('<div><span>not</span></div>');
