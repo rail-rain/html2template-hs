@@ -1,41 +1,55 @@
-var renders = {
-  '?': function (variable, html) {//if
-    if (variable) {
-      return html();
+(function () {
+  "use strict";
+  var renders = {
+    '?': function (variable, html) {//if
+      if (variable) {
+        return html();
+      }
+    },
+    '^': function (variable, html) {// if !
+      if (!variable) {
+        return html();
+      }
+    },
+    '#': function (variable, html) {// array
+      return variable.map(function (current) {
+        return html(current);
+      });
+    },
+    '+': function (variable, html) {// number
+      var results = [];
+      for (var i = 0; i < variable; i++) {
+        results.push(html(i));
+      }
+      return results;
     }
-  },
-  '^': function (variable, html) {// if !
-    if (!variable) {
-      return html();
+  };
+
+  var mustacheReplace = function (mustache, body) {
+    
+    if (mustache.indexOf('"') !== 0) {
+      body = '"+' + body;
     }
-  },
-  '#': function (variable, html) {// array
-    return variable.map(function (current) {
-      return html(current);
-    });
-  },
-  '+': function (variable, html) {// number
-    var results = [];
-    for (var i = 0; i < variable; i++) {
-      results.push(html(i));
+    if (mustache.lastIndexOf('"') !== mustache.length - 1) {
+      body += '+"';
     }
-    return results;
+    return body;
+  };
+
+  var html2hs = require('./htmlParser');
+
+  module.exports = function (html, h) {
+
+    var hscript = html2hs(html);
+    
+    return new Function('r', 'h', 'o', 'return ' + hscript
+      .replace(/"{{([\#\?\^\+])(.+?)}}",/g, 'r["$1"](o.$2,function(v){return ')
+      .replace(/,"{{\/.+?}}"/g, '})')
+      .replace(/{{(.+?)}}/g, '{{o.$1}}')
+      .replace(/{{o\.\.}}/g, "{{v}}")
+      .replace(/{{o\.\.(.+?)}}/g, "{{v.$1}}")
+      .replace(/"?{{(.+?)}}"?/g, mustacheReplace))
+      .bind(null, renders, h);
   }
-};
 
-var html2hs = require('./htmlParser');
-
-module.exports = function (html, h) {
-
-  var hscript = html2hs(html);
-  return new Function('r', 'h', 'o', 'return ' + hscript
-    .replace(/"{{([\#\?\^\+])(.+?)}}",/g, 'r["$1"](o.$2,function(v){return ')
-    .replace(/,"{{\/.+?}}"/g, '})')
-    .replace(/{{(.+?)}}/g, '{{o.$1}}')
-    .replace(/{{o\.\.}}/g, "{{v}}")
-    .replace(/{{o\.\.(.+?)}}/g, "{{v.$1}}")
-    .replace(/("{{|}}")/g, '')
-    .replace(/{{/g, '"+').replace(/}}/g, '+"'))
-    .bind(null, renders, h);
-}
-
+}());

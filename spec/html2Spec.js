@@ -65,6 +65,13 @@ describe("html2ths", function() {
       .toBe('<span>hello!</span>');
   });
   
+  it('variables', function () {
+    expect(html2ths(
+      '<span>(greeting : {{greeting}})</span>',
+      h)(obj).outerHTML)
+      .toBe('<span>(greeting : hello!)</span>');
+  });
+  
   it('if', function () {
     expect(html2ths(
       '<div>' +
