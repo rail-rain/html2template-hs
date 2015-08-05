@@ -1,6 +1,6 @@
 # html2template-hs
 
-converted html into the [handlebars] like template hyperscript !
+converted html into the [handlebars] like template hyperscript and virtual-hyperscript !
 
 ## demo
 
@@ -21,6 +21,7 @@ var hscript = html2ths.compile(
 * [docs](#docs)
   - [helpers](#helpers)
   - [api](#api)
+  - [virtual-hyperscript](#virtual-hyperscript)
 * [thanks](#thanks)
 
 ## docs
@@ -236,6 +237,12 @@ html2ths.registerHelper(name, helper)
  * @param {String} name
 */
 html2ths.unregisterHelper(name)
+```
+
+### virtual-hyperscript
+
+``` js
+var html2tvd = require('html2template-hs/virtual-dom');
 ```
 
 ## thanks
