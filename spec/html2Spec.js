@@ -207,6 +207,19 @@ describe("html2ths", function() {
       .toBe('<div><span>not</span></div>');
   });
   
+  it('whitespace helpers', function () {
+    expect(html2ths.compile(
+      '<div>' +
+        '   {{#if flag}}   ' +
+          '<span>{{greeting}}</span>' +
+        '{{else}}' +
+          '<span>world</span>' +
+        '{{/if}}' +
+      '</div>',
+      h)(obj).outerHTML)
+      .toBe('<div><span>world</span></div>');
+  });
+  
 });
 
 

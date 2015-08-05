@@ -60,9 +60,9 @@
     var hscript = html2hs(html);
     
     return new Function('r', 'h', 'o', 'return ' + hscript
-      .replace(/"{{(\#)?(\w+) (.+?)}}",?/g, helpersReplace)
-      .replace(/,"{{\/\w+}}"/g, ']})')
-      .replace(/,"{{else}}",/g, ']},function(){return [')
+      .replace(/" ?{{(\#)?(\w+) (.+?)}} ?",?/g, helpersReplace)
+      .replace(/," ?{{\/\w+}} ?"/g, ']})')
+      .replace(/," ?{{else}} ?",/g, ']},function(){return [')
       .replace(/"?{{([.\w\[\]]+)}}"?/g, mustacheReplace))
       .bind(null, helpers, h);
   };
