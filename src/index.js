@@ -71,9 +71,14 @@
     helpers[name] = helper;
   };
   
+  var unregisterHelper = function (name) {
+    helpers[name] = undefined;
+  };
+  
   module.exports = {
-    compile: compile,
-    registerHelper: registerHelper
+    'compile': compile,
+    'registerHelper': registerHelper,
+    'unregisterHelper': unregisterHelper
   };
 
 }());

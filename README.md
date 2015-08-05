@@ -1,6 +1,6 @@
 # html2template-hs
 
-converted html into the mustache like template hyperscript !
+converted html into the [handlebars] like template hyperscript !
 
 ## demo
 
@@ -11,15 +11,22 @@ var obj = {
   greeting: "hello!"
 };
 
-var hscript = html2ths(
+var hscript = html2ths.compile(
   '<span>{{greeting}}</span>',
   h);
   console.log(hscript(obj).outerHTML);
    // <span>hello!</span>
 ```
 
-## api
+* [docs](#docs)
+  - [helpers](#helpers)
+  - [api](#api)
+* [thanks](#thanks)
+
+## docs
 (i will omit the "require" of api)
+
+### helpers
 
 ####if
 ``` js
@@ -27,11 +34,11 @@ var obj = {
   flag: false
 };
 
-var hscript = html2ths(
+var hscript = html2ths.compile(
     '<div>' +
-      '{{?flag}}' +
+      '{{#if flag}}' +
         '<span>hello</span>' +
-      '{{/flag}}' +
+      '{{/if}}' +
       '<span>world</span>' +
     '</div>',
   h);
@@ -41,17 +48,17 @@ var hscript = html2ths(
    // </div>
 ```
 
-####reverse if
+####unless
 ``` js
 var obj = {
   flag: false
 };
 
-var hscript = html2ths(
+var hscript = html2ths.compile(
   '<div>' +
-    '{{^flag}}' +
+    '{{#unless flag}}' +
       '<span>hello</span>' +
-    '{{/flag}}' +
+    '{{/unless}}' +
     '<span>world</span>' +
   '</div>',
   h)
@@ -61,6 +68,28 @@ var hscript = html2ths(
   //   <span>world</span>
   // </div>
 ```
+####if else
+``` js
+var obj = {
+  flag: false
+};
+
+var hscript = html2ths.compile(
+    '<div>' +
+      '{{#if flag}}' +
+        '<span>hello</span>' +
+      '{{else}}' +
+        '<span>good night</span>' +
+      '{{/if}}' +
+      '<span>world</span>' +
+    '</div>',
+  h);
+  console.log(hscript);
+   // <div>
+   //   <span>good night</span>
+   //   <span>world</span>
+   // </div>
+```
 
 ####array repeat
 ``` js
@@ -68,11 +97,11 @@ var obj = {
   items: ['hello', 'world']
 };
 
-var hscript = html2ths(
+var hscript = html2ths.compile(
   '<div>' +
-    '{{#array}}' +
+    '{{#each array}}' +
       '<span>{{.}}</span>' +
-    '{{/array}}' +
+    '{{/each}}' +
   '</div>',
   h);
   console.log(hscript(obj).outerHTML);
@@ -91,11 +120,11 @@ var obj = {
   ]
 };
 
-var hscript = html2ths(
+var hscript = html2ths.compile(
   '<div>' +
-    '{{#object}}' +
+    '{{#each object}}' +
       '<span>{{.greeting}}</span>' +
-    '{{/object}}' +
+    '{{/each}}' +
   '</div>',
   h);
   console.log(hscript(obj).outerHTML);
@@ -105,17 +134,78 @@ var hscript = html2ths(
   // </div>
 ```
 
-####number repeat
+####registe helper
+
+``` js
+var obj = {
+  name: 'world'
+};
+
+html2ths.registerHelper("greeting", function (name) {
+  return 'hello ' + name;
+});
+
+var hscript = html2ths.compile(
+    '<span>{{greeting name}}</span>',
+  h);
+  console.log(hscript(obj).outerHTML);
+  //   <span>hello world</span>
+```
+
+####registe block helper
+``` js
+var obj = {
+  greeting: {
+    morning: 'good morning',
+    noon: 'hello',
+    evening: 'good evening',
+    night: 'good night'
+  }
+};
+
+html2ths.registerHelper("with", function (object, html) {
+  return html(object);
+});
+
+var hscript = html2ths.compile(
+  '<div>' +
+    '{{#with greeting}}' +
+      '<span>{{.morning}}</span>' +
+      '<span>{{.noon}}</span>' +
+      '<span>{{.evening}}</span>' +
+      '<span>{{.night}}</span>' +
+    '{{/with}}' +
+  '</div>',
+  h);
+  console.log(hscript(obj).outerHTML);
+  // <div>
+  //   <span>good morning</span>
+  //   <span>hello</span>
+  //   <span>good evening</span>
+  //   <span>good night</span>
+  // </div>
+
+```
+
+another sample
 ``` js
 var obj = {
   items: 3
 };
 
-var hscript = html2ths(
+html2ths.registerHelper("for", function (number, html) {
+  var results = [];
+  for (var i = 0; i < number; i++) {
+    results.push(html(i));
+  }
+  return results;
+});
+
+var hscript = html2ths.compile(
   '<div>' +
-    '{{+number}}' +
+    '{{#for number}}' +
       '<span>{{.}}</span>' +
-    '{{/number}}' +
+    '{{/for}}' +
   '</div>',
   h);
   console.log(hscript(obj).outerHTML);
@@ -125,3 +215,33 @@ var hscript = html2ths(
   //   <span>2</span>
   // </div>
 ```
+
+### api
+
+``` js
+/**
+ * @param {String} html
+ * @param {Function} h hyperscript
+ * @return {Function} template 
+*/
+html2ths.compile(html, h)
+
+/**
+ * @param {String} name
+ * @param {Function} helper
+*/
+html2ths.registerHelper(name, helper)
+
+/**
+ * @param {String} name
+*/
+html2ths.unregisterHelper(name)
+```
+
+## thanks
+
+  [handlebars] MIT
+  
+  Copyright (C) 2011-2015 by Yehuda Katz
+  
+[handlebars]: http://handlebarsjs.com/ "handlebars"

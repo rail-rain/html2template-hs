@@ -206,4 +206,7 @@ describe("html2ths", function() {
       h)(obj).outerHTML)
       .toBe('<div><span>not</span></div>');
   });
+  
 });
+
+
