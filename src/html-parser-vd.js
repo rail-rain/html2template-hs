@@ -15,13 +15,25 @@ var TagParse = function (root, name, attributes, children) {
       .toString();
   }
   if (attributes) {
+    var properties = "";
     attributes = attributes
-      .replace(/ ([\w-]+?)="(.+?)"/g, ",\"$1\":\"$2\"")
-      .substr(1);
+      .replace(/ ([\w-]+?)="(.+?)"/g, function (full, name, variable) {
+        var isAttr = name.search(/(hook|ev-)/) === -1;
+        if (!isAttr) {
+          properties += (',"' + name + '":"' + variable + '"');
+          return '';
+        }
+        
+        return ',"' + name + '":"' + variable + '"';
+      }).substr(1);
   }
 
   return "h(\"" + name + "\""
-  + (attributes ? ",{attributes:{" + attributes + "}}" : "")
+  + (attributes || properties ? ",{"
+  + (attributes ? "attributes:{" + attributes + "}" : "")
+  + (attributes && properties ? ",": "")
+  + (properties ? properties.substr(1) : "")
+  + "}" : "")
   + (children ? ",[" + children + "]" : "") + ")";
 };
 

@@ -1,5 +1,5 @@
 describe('html2hs', function () {
-  var html2hs = require('../src/htmlParser.js');
+  var html2hs = require('../src/html-parser-hs.js');
   
   it('base', function () {
     expect(html2hs(
@@ -15,7 +15,7 @@ describe('html2hs', function () {
         '<input type="text">' +
         '<span>foo</span>' +
       '</div>'
-    )).toBe('h("div",[h("input",{attributes:{"type":"text"}}),h("span",["foo"])])');
+    )).toBe('h("div",[h("input",{"type":"text"}),h("span",["foo"])])');
   });
   
   it('non children', function () {
@@ -42,6 +42,18 @@ describe('html2hs', function () {
     )).toBe('h("div",["{{foo}} ",h("span",[" foo"])])');
   });
   
+});
+
+describe('html2hs', function () {
+  var html2vd = require('../src/html-parser-vd.js');
+  
+  it('attributes and property', function () {
+    expect(html2vd(
+      '<div>' +
+        '<input type="text" ev-click="click">' +
+      '</div>'
+    )).toBe('h("div",[h("input",{attributes:{"type":"text"},"ev-click":"click"})])');
+  });
 });
 
 describe("html2ths", function() {
