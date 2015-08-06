@@ -1,5 +1,11 @@
 var htmlSpliter = /(<([\w-]+)(?:\s[^>]*)?>(?:.*?<\/\2>)?|[^<]+)/g,
-  tagSpliter = /^<([\w-]+)(\s[^>]*)?>(.*?)(?:<\/\1>)?$/;
+  tagSpliter = /^<([\w-]+)(\s[^>]*)?>(.*?)(?:<\/\1>)?$/,
+  notAttributes = /(ev-)/;
+  
+var setNotAttributes = function (newNotAttributes) {
+  notAttributes = new RegExp(
+    "(" + newNotAttributes.join("|") + ")");
+};
 
 var textParse = function (textNode, parent) {
   if (/^\s+$/.test(textNode)) {
@@ -18,7 +24,7 @@ var TagParse = function (root, name, attributes, children) {
     var properties = "";
     attributes = attributes
       .replace(/ ([\w-]+?)="(.+?)"/g, function (full, name, variable) {
-        var isAttr = name.search(/(hook|ev-)/) === -1;
+        var isAttr = name.search(notAttributes) === -1;
         if (!isAttr) {
           properties += (',"' + name + '":"' + variable + '"');
           return '';
