@@ -245,6 +245,14 @@ html2ths.unregisterHelper(name)
 var html2tvd = require('html2template-hs/virtual-dom');
 ```
 
+####api
+``` js
+/**
+ * @param {Array} notAttributes sample > ['ev-', 'hook']
+*/
+html2vd.setNotAttributes(notAttributes)
+```
+
 ## thanks
 
   [handlebars] MIT
