@@ -1,5 +1,4 @@
-(function () {
-  "use strict";
+"use strict";
 
   var html2hs = require('./html-parser-hs');
   
@@ -56,8 +55,7 @@
       .join(",") + (isBlock ? ',function(v){return [' : ')');
   };
 
-  var compile = function (html, h) {
-    var hscript = html2hs(html);
+  var compile = function (hscript, h) {
     
     return new Function('r', 'h', 'o', 'return ' + hscript
       .replace(/" ?{{(\#)?(\w+) (.+?)}} ?",?/g, helpersReplace)
@@ -80,5 +78,3 @@
     'registerHelper': registerHelper,
     'unregisterHelper': unregisterHelper
   };
-
-}());

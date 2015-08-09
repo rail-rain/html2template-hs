@@ -1,5 +1,5 @@
 describe('html2hs', function () {
-  var html2hs = require('../src/html-parser-hs.js');
+  var html2hs = require('../src/hyperscript-converter.js');
   
   it('base', function () {
     expect(html2hs(
@@ -45,7 +45,7 @@ describe('html2hs', function () {
 });
 
 describe('html2hs', function () {
-  var html2vd = require('../src/html-parser-vd.js');
+  var html2vd = require('../src/virtual-dom-converter.js');
   
   it('attributes and property', function () {
     expect(html2vd(
@@ -57,7 +57,7 @@ describe('html2hs', function () {
 });
 
 describe("html2ths", function() {
-  var html2ths = require('../src/index.js');
+  var html2ths = require('../hyperscript');
   var h = require('hyperscript');
   var obj = {
     greeting: "hello!",
