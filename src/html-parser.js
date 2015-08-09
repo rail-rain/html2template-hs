@@ -5,6 +5,8 @@ var htmlParser = function (events) {
   this.tagConvert = events.tagConvert;
   this.attributesConvert = events.attributesConvert;
   this.textConvert = events.textConvert;
+  
+  return this.htmlParse.bind(this);
 };
 
 htmlParser.prototype.textParse = function (textNode, parent) {

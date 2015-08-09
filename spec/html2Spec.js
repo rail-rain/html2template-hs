@@ -57,7 +57,7 @@ describe('html2hs', function () {
 });
 
 describe("html2ths", function() {
-  var html2ths = require('../hyperscript');
+  var html2ths = require('../hyperscript.js');
   var h = require('hyperscript');
   var obj = {
     greeting: "hello!",

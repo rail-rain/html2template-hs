@@ -1,6 +1,4 @@
 "use strict";
-
-  var html2hs = require('./html-parser-hs');
   
   var helpers = {
     'if': function (flag, html, elseHtml) {
