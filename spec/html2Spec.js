@@ -42,6 +42,18 @@ describe('html2hs', function () {
     )).toBe('h("div",["{{foo}} ",h("span",[" foo"])])');
   });
   
+  it('customParser', function () {
+    var customParser = html2hs.createParser({
+      attributes: function (name, value) {
+        if (value === "foo") value = "bar";
+        return [name, value];
+      }
+    });
+    expect(customParser(
+      '<span id="foo">foo</span>'
+    )).toBe('h("span",{"id":"bar"},["foo"])');
+  });
+  
 });
 
 describe('html2hs', function () {

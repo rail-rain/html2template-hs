@@ -1,10 +1,10 @@
 var notAttributes = /(ev-)/;
-var htmlParser = require('./html-parser');
+var htmlParser = require('./converter-template');
 
 var properties = "";
 
-var htmlParse = new htmlParser({
-    attributesConvert: function (full, name, value) {
+var htmlParse = htmlParser({
+    attributesConvert: function (name, value) {
       var isAttr = name.search(notAttributes) === -1;
       if (!isAttr) {
         properties += (',"' + name + '":"' + value + '"');
