@@ -19,7 +19,7 @@ var hscript = html2ths.compile(
 ```
 
 * [docs](#docs)
-  - [built-in helpers](#built-in helpers)
+  - [built-in helpers](#built-in-helpers)
   - [api](#api)
   - [jsdoc](#jsdoc)
   - [virtual-hyperscript](#virtual-hyperscript)
@@ -32,9 +32,9 @@ var hscript = html2ths.compile(
 
 * [if](#if)
 * [unless](#unless)
-* [if else](#if else)
-* [array repeat](#array repeat)
-* [object in array repeat](#object in array repeat)
+* [if else](#if-else)
+* [array repeat](#array-repeat)
+* [object in array repeat](#object-in-array-repeat)
 
 #### if
 ``` js
@@ -145,8 +145,9 @@ var hscript = html2ths.compile(
 
 ### api
 
-* [registe helper](#registe helper)
-* [registe block helper](#registe block helper)
+* [registe helper](#registe-helper)
+* [registe block helper](#registe-block-helper)
+* [custom parser](#custom-parser)
 
 #### registe helper
 
@@ -266,6 +267,17 @@ html2ths.registerHelper(name, helper)
  * @param {String} name
 */
 html2ths.unregisterHelper(name)
+
+/**
+ * @param {Object} option
+  * @param {Function} attributes
+  * @param {Function} textNode
+ * @return {Function} compiler
+ */
+html2ths.createCompiler({
+  attributes: attributes,
+  textNode: textNode
+})
 ```
 
 ### virtual-hyperscript
