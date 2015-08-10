@@ -7,5 +7,11 @@ module.exports = {
   },
   setNotAttributes: virtualDom.setNotAttributes,
   registerHelper: compiler.registerHelper,
-  unregisterHelper: compiler.unregisterHelper
+  unregisterHelper: compiler.unregisterHelper,
+  createCompiler: function (parsers) {
+    var customParser = virtualDom.createParser(parsers);
+    return function (html, h) {
+      return compiler.compile(customParser(html), h);
+    };
+  }
 };

@@ -19,17 +19,24 @@ var hscript = html2ths.compile(
 ```
 
 * [docs](#docs)
-  - [helpers](#helpers)
+  - [built-in helpers](#built-in helpers)
   - [api](#api)
+  - [jsdoc](#jsdoc)
   - [virtual-hyperscript](#virtual-hyperscript)
 * [thanks](#thanks)
 
 ## docs
 (i will omit the "require" of api)
 
-### helpers
+### built-in helpers
 
-####if
+* [if](#if)
+* [unless](#unless)
+* [if else](#if else)
+* [array repeat](#array repeat)
+* [object in array repeat](#object in array repeat)
+
+#### if
 ``` js
 var obj = {
   flag: false
@@ -49,7 +56,8 @@ var hscript = html2ths.compile(
    // </div>
 ```
 
-####unless
+#### unless
+
 ``` js
 var obj = {
   flag: false
@@ -69,7 +77,7 @@ var hscript = html2ths.compile(
   //   <span>world</span>
   // </div>
 ```
-####if else
+#### if else
 ``` js
 var obj = {
   flag: false
@@ -92,7 +100,7 @@ var hscript = html2ths.compile(
    // </div>
 ```
 
-####array repeat
+#### array repeat
 ``` js
 var obj = {
   items: ['hello', 'world']
@@ -112,7 +120,7 @@ var hscript = html2ths.compile(
   // </div>
 ```
 
-####object in array repeat
+#### object in array repeat
 ``` js
 var obj = {
   items: [
@@ -135,7 +143,12 @@ var hscript = html2ths.compile(
   // </div>
 ```
 
-####registe helper
+### api
+
+* [registe helper](#registe helper)
+* [registe block helper](#registe block helper)
+
+#### registe helper
 
 ``` js
 var obj = {
@@ -153,7 +166,7 @@ var hscript = html2ths.compile(
   //   <span>hello world</span>
 ```
 
-####registe block helper
+#### registe block helper
 ``` js
 var obj = {
   greeting: {
@@ -189,6 +202,7 @@ var hscript = html2ths.compile(
 ```
 
 another sample
+
 ``` js
 var obj = {
   items: 3
@@ -217,7 +231,22 @@ var hscript = html2ths.compile(
   // </div>
 ```
 
-### api
+#### custom parser
+``` js
+var customParser = html2ths.createCompiler({
+  attributes: function (name, value) {
+    if (value === "foo") value = "bar";
+    return [name, value];
+  }
+});
+var hscript = customParser('<span id="foo">foo</span>', h);
+
+console.log(hscript(obj).outerHTML);
+// h("span",{"id":"bar"},["foo"])
+});
+```
+
+### jsdoc
 
 ``` js
 /**
@@ -245,7 +274,7 @@ html2ths.unregisterHelper(name)
 var html2tvd = require('html2template-hs/virtual-dom');
 ```
 
-####api
+#### api
 ``` js
 /**
  * @param {Array} notAttributes sample > ['ev-', 'hook']

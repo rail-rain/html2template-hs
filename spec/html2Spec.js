@@ -171,7 +171,7 @@ describe("html2ths", function() {
       .toBe('<div><span>hello</span><span>!</span><span>world</span></div>');
   });
   
-  beforeEach(function() {
+  it('registe helper', function () {
     html2ths.registerHelper("for", function (number, html) {
       var results = [];
       for (var i = 0; i < number; i++) {
@@ -179,9 +179,7 @@ describe("html2ths", function() {
       }
       return results;
     });
-  });
-  
-  it('registe helper', function () {
+    
     expect(html2ths.compile(
       '<div>' +
         '{{#for number}}' +
@@ -192,13 +190,11 @@ describe("html2ths", function() {
       .toBe('<div><span>0</span><span>1</span><span>2</span></div>');
   });
   
-  beforeEach(function() {
+  it('non block helpers', function () {
     html2ths.registerHelper("space", function (foo, bar) {
       return foo + ' ' + bar;
     });
-  });
-  
-  it('non block helpers', function () {
+    
     expect(html2ths.compile(
         '<span>{{space array[0] array[1]}}</span>',
       h)(obj).outerHTML)
@@ -242,6 +238,19 @@ describe("html2ths", function() {
       '</div>',
       h)(obj).outerHTML)
       .toBe('<div><span>world</span></div>');
+  });
+  
+  it('customParser', function () {
+    var customCompiler = html2ths.createCompiler({
+      attributes: function (name, value) {
+        if (value === "foo") value = "bar";
+        return [name, value];
+      }
+    });
+    expect(customCompiler(
+      '<span id="foo">foo</span>'
+    , h)(obj).outerHTML)
+    .toBe('<span id="bar">foo</span>');
   });
   
 });
