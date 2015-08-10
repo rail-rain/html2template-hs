@@ -1,6 +1,6 @@
-var htmlParser = require('./html-parser.js');
+var htmlParser = require('./html-parser');
 
-module.exports = new htmlParser({
+var htmlParse = new htmlParser({
   attributesConvert: ",\"$1\":\"$2\"",
   
   tagConvert: function (name, attributes, children) {
@@ -12,3 +12,5 @@ module.exports = new htmlParser({
     return JSON.stringify(textNode.replace(/\s+/g, " "));
   }
 });
+
+module.exports = htmlParse;

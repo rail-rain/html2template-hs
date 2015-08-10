@@ -1,7 +1,7 @@
 {
   "name": "html2template-hs",
   "main": "hyperscript",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "author": {
     "name": "rail-rain"
   },
@@ -21,7 +21,6 @@
   "scripts": {
     "test": "jasmine"
   },
-  "dependencies": {},
   "devDependencies": {
     "hyperscript": "^1.4.6",
     "jasmine": "^2.3.1"

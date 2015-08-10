@@ -1,5 +1,5 @@
 var notAttributes = /(ev-)/;
-var htmlParser = require('./html-parser.js');
+var htmlParser = require('./html-parser');
 
 var properties = "";
 
@@ -34,5 +34,5 @@ var htmlParse = new htmlParser({
     notAttributes = new RegExp(
       "(" + newNotAttributes.join("|") + ")");
   };
-
+  
 module.exports = htmlParse;
