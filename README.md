@@ -2,6 +2,8 @@
 
 converted html into the [handlebars] like template hyperscript and virtual-hyperscript !
 
+This is still during the experiment therefore Possibility of change without notice
+
 ## demo
 
 ``` js
@@ -109,7 +111,7 @@ var obj = {
 var hscript = html2ths.compile(
   '<div>' +
     '{{#each array}}' +
-      '<span>{{.}}</span>' +
+      '<span>{{this}}</span>' +
     '{{/each}}' +
   '</div>',
   h);
@@ -132,7 +134,7 @@ var obj = {
 var hscript = html2ths.compile(
   '<div>' +
     '{{#each object}}' +
-      '<span>{{.greeting}}</span>' +
+      '<span>{{this.greeting}}</span>' +
     '{{/each}}' +
   '</div>',
   h);
@@ -147,7 +149,6 @@ var hscript = html2ths.compile(
 
 * [registe helper](#registe-helper)
 * [registe block helper](#registe-block-helper)
-* [custom parser](#custom-parser)
 
 #### registe helper
 
@@ -185,10 +186,10 @@ html2ths.registerHelper("with", function (object, html) {
 var hscript = html2ths.compile(
   '<div>' +
     '{{#with greeting}}' +
-      '<span>{{.morning}}</span>' +
-      '<span>{{.noon}}</span>' +
-      '<span>{{.evening}}</span>' +
-      '<span>{{.night}}</span>' +
+      '<span>{{this.morning}}</span>' +
+      '<span>{{this.noon}}</span>' +
+      '<span>{{this.evening}}</span>' +
+      '<span>{{this.night}}</span>' +
     '{{/with}}' +
   '</div>',
   h);
@@ -220,7 +221,7 @@ html2ths.registerHelper("for", function (number, html) {
 var hscript = html2ths.compile(
   '<div>' +
     '{{#for number}}' +
-      '<span>{{.}}</span>' +
+      '<span>{{this}}</span>' +
     '{{/for}}' +
   '</div>',
   h);
@@ -230,21 +231,6 @@ var hscript = html2ths.compile(
   //   <span>1</span>
   //   <span>2</span>
   // </div>
-```
-
-#### custom parser
-``` js
-var customParser = html2ths.createCompiler({
-  attributes: function (name, value) {
-    if (value === "foo") value = "bar";
-    return [name, value];
-  }
-});
-var hscript = customParser('<span id="foo">foo</span>', h);
-
-console.log(hscript(obj).outerHTML);
-// h("span",{"id":"bar"},["foo"])
-});
 ```
 
 ### jsdoc
@@ -267,17 +253,6 @@ html2ths.registerHelper(name, helper)
  * @param {String} name
 */
 html2ths.unregisterHelper(name)
-
-/**
- * @param {Object} option
-  * @param {Function} attributes
-  * @param {Function} textNode
- * @return {Function} compiler
- */
-html2ths.createCompiler({
-  attributes: attributes,
-  textNode: textNode
-})
 ```
 
 ### virtual-hyperscript
