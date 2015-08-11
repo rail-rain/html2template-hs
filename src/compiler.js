@@ -25,13 +25,13 @@
       }
     }
   };
-
+  
   var mustacheReplace = function (mustache, body) {
-    if (body.indexOf(".") === 0) {
+    if (body.indexOf("this") === 0) {
       if (body.length === 1) {
         body = 'v';
       } else {
-        body = 'v' + body;
+        body = 'v' + body.substr(4);
       }
     } else {
       body = 'o.' + body;
@@ -59,7 +59,8 @@
       .replace(/" ?{{(\#)?(\w+) (.+?)}} ?",?/g, helpersReplace)
       .replace(/," ?{{\/\w+}} ?"/g, ']})')
       .replace(/," ?{{else}} ?",/g, ']},function(){return [')
-      .replace(/"?{{([.\w\[\]]+)}}"?/g, mustacheReplace))
+      .replace(/"?{{([.\w\[\]]+)}}"?/g, mustacheReplace)
+      .replace(/o\.\./g, "o"))
       .bind(null, helpers, h);
   };
   

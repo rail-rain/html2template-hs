@@ -1,9 +1,7 @@
-var htmlParser = require('./converter-template');
+var htmlParser = require('./html-parser');
 
-var htmlParse = htmlParser({
-  attributesConvert: function (name, value) {
-    return ',"' + name + '":"' + value + '"';
-  },
+var htmlParse = new htmlParser({
+  attributesConvert: ',"$1":"$2"',
   tagConvert: function (name, attributes, children) {
     return "h(\"" + name + "\""
     + (attributes ? ",{" + attributes + "}" : "")

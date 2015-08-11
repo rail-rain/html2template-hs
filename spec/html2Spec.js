@@ -42,18 +42,6 @@ describe('html2hs', function () {
     )).toBe('h("div",["{{foo}} ",h("span",[" foo"])])');
   });
   
-  it('customParser', function () {
-    var customParser = html2hs.createParser({
-      attributes: function (name, value) {
-        if (value === "foo") value = "bar";
-        return [name, value];
-      }
-    });
-    expect(customParser(
-      '<span id="foo">foo</span>'
-    )).toBe('h("span",{"id":"bar"},["foo"])');
-  });
-  
 });
 
 describe('html2hs', function () {
@@ -134,7 +122,7 @@ describe("html2ths", function() {
     expect(html2ths.compile(
       '<div>' +
         '{{#each array}}' +
-          '<span>{{.}}</span>' +
+          '<span>{{this}}</span>' +
         '{{/each}}' +
       '</div>',
       h)(obj).outerHTML).toBe(
@@ -148,7 +136,7 @@ describe("html2ths", function() {
     expect(html2ths.compile(
       '<div>' +
         '{{#each object}}' +
-          '<span>{{.greeting}}</span>' +
+          '<span>{{this.greeting}}</span>' +
         '{{/each}}' +
       '</div>',
       h)(obj).outerHTML).toBe(
@@ -183,7 +171,7 @@ describe("html2ths", function() {
     expect(html2ths.compile(
       '<div>' +
         '{{#for number}}' +
-          '<span>{{.}}</span>' +
+          '<span>{{this}}</span>' +
         '{{/for}}' +
       '</div>',
       h)(obj).outerHTML)
@@ -218,7 +206,7 @@ describe("html2ths", function() {
     expect(html2ths.compile(
       '<div>' +
         '{{#each arrayNot}}' +
-          '<span>{{.}}</span>' +
+          '<span>{{this}}</span>' +
         '{{else}}' +
           '<span>not</span>' +
         '{{/each}}' +
@@ -240,17 +228,15 @@ describe("html2ths", function() {
       .toBe('<div><span>world</span></div>');
   });
   
-  it('customParser', function () {
-    var customCompiler = html2ths.createCompiler({
-      attributes: function (name, value) {
-        if (value === "foo") value = "bar";
-        return [name, value];
-      }
+  it('global this', function () {
+    html2ths.registerHelper("gt", function (object) {
+      return object.greeting;
     });
-    expect(customCompiler(
-      '<span id="foo">foo</span>'
-    , h)(obj).outerHTML)
-    .toBe('<span id="bar">foo</span>');
+    
+    expect(html2ths.compile(
+      '<span>{{gt .}}</span>',
+      h)(obj).outerHTML)
+      .toBe('<span>hello!</span>');
   });
   
 });

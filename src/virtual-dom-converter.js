@@ -1,16 +1,15 @@
 var notAttributes = /(ev-)/;
-var htmlParser = require('./converter-template');
+var htmlParser = require('./html-parser');
 
 var properties = "";
 
-var htmlParse = htmlParser({
-    attributesConvert: function (name, value) {
+var htmlParse = new htmlParser({
+    attributesConvert: function (full, name, value) {
       var isAttr = name.search(notAttributes) === -1;
       if (!isAttr) {
         properties += (',"' + name + '":"' + value + '"');
         return '';
       }
-      
       return ',"' + name + '":"' + value + '"';
     },
     tagConvert: function (name, attributes, children) {
