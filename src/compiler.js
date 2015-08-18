@@ -8,9 +8,11 @@ var convert = function (html) {
 };
 
 var compile = function (html, h) {
-  return new Function('helpers', 'h', 'o', 'return '
-  + convert(html)
-).bind(null, helper.helpers, h);
+  return new Function("helpers", "h", "obj"
+  , "with(obj){"
+  + "return " + convert(html)
+  + "}"
+  ).bind(null, helper.helpers, h);
 };
 
 var compiler = {

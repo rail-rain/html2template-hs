@@ -67,7 +67,8 @@ describe("html2ths", function() {
       {greeting: "hello"},
       {greeting: "world"}
     ],
-    number: 3
+    number: 3,
+    arrayNot: null
   };
 
   it("base", function() {
@@ -234,11 +235,10 @@ describe("html2ths", function() {
     });
     
     expect(html2ths.compile(
-      '<span>{{gt .}}</span>',
+      '<span>{{gt obj}}</span>',
       h)(obj).outerHTML)
       .toBe('<span>hello!</span>');
   });
-  
 });
 
 
