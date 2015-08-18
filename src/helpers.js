@@ -1,7 +1,7 @@
 "use strict";
 
 var helpers = {
-  "if": function (flag, html, elseHtml) {
+  if: function (flag, html, elseHtml) {
     if (flag) {
       return html();
     } else if (elseHtml) {

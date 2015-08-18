@@ -21,130 +21,16 @@ var hscript = html2ths.compile(
 ```
 
 * [docs](#docs)
-  - [built-in helpers](#built-in-helpers)
   - [api](#api)
   - [jsdoc](#jsdoc)
   - [virtual-hyperscript](#virtual-hyperscript)
 * [thanks](#thanks)
 
 ## docs
+
+[simple specification](https://github.com/rail-rain/html2template-hs/blob/master/handlebars-light.md)
+
 (i will omit the "require" of api)
-
-### built-in helpers
-
-* [if](#if)
-* [unless](#unless)
-* [if else](#if-else)
-* [array repeat](#array-repeat)
-* [object in array repeat](#object-in-array-repeat)
-
-#### if
-``` js
-var obj = {
-  flag: false
-};
-
-var hscript = html2ths.compile(
-    '<div>' +
-      '{{#if flag}}' +
-        '<span>hello</span>' +
-      '{{/if}}' +
-      '<span>world</span>' +
-    '</div>',
-  h);
-  console.log(hscript);
-   // <div>
-   //   <span>world</span>
-   // </div>
-```
-
-#### unless
-
-``` js
-var obj = {
-  flag: false
-};
-
-var hscript = html2ths.compile(
-  '<div>' +
-    '{{#unless flag}}' +
-      '<span>hello</span>' +
-    '{{/unless}}' +
-    '<span>world</span>' +
-  '</div>',
-  h)
-  console.log(hscript(obj).outerHTML);
-  // <div>
-  //   <span>hello</span>
-  //   <span>world</span>
-  // </div>
-```
-#### if else
-``` js
-var obj = {
-  flag: false
-};
-
-var hscript = html2ths.compile(
-    '<div>' +
-      '{{#if flag}}' +
-        '<span>hello</span>' +
-      '{{else}}' +
-        '<span>good night</span>' +
-      '{{/if}}' +
-      '<span>world</span>' +
-    '</div>',
-  h);
-  console.log(hscript);
-   // <div>
-   //   <span>good night</span>
-   //   <span>world</span>
-   // </div>
-```
-
-#### array repeat
-``` js
-var obj = {
-  items: ['hello', 'world']
-};
-
-var hscript = html2ths.compile(
-  '<div>' +
-    '{{#each array}}' +
-      '<span>{{this}}</span>' +
-    '{{/each}}' +
-  '</div>',
-  h);
-  console.log(hscript(obj).outerHTML);
-  // <div>
-  //   <span>hello</span>
-  //   <span>world</span>
-  // </div>
-```
-
-#### object in array repeat
-``` js
-var obj = {
-  items: [
-    {greeting: "hello"},
-    {greeting: "world"}
-  ]
-};
-
-var hscript = html2ths.compile(
-  '<div>' +
-    '{{#each object}}' +
-      '<span>{{this.greeting}}</span>' +
-    '{{/each}}' +
-  '</div>',
-  h);
-  console.log(hscript(obj).outerHTML);
-  // <div>
-  //   <span>hello</span>
-  //   <span>world</span>
-  // </div>
-```
-
 ### api
 
 * [registe helper](#registe-helper)
