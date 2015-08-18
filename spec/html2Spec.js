@@ -39,7 +39,7 @@ describe('html2hs', function () {
       '  <div>\n' +
         '{{foo}}  <span> foo</span>\n' +
       '  </div>  '
-    )).toBe('h("div",["{{foo}} ",h("span",[" foo"])])');
+    )).toBe('h("div",["{{foo}}",h("span",["foo"])])');
   });
   
 });

@@ -1,3 +1,5 @@
+"use strict";
+
 var htmlSpliter = /(<([\w-]+)(?:\s[^>]*)?>(?:.*?<\/\2>)?|[^<]+)/g,
   tagSpliter = /^<([\w-]+)(\s[^>]*)?>(.*?)(?:<\/\1>)?$/;
   
@@ -12,7 +14,7 @@ var htmlParser = function (events) {
 htmlParser.prototype.textParse = function (textNode, parent) {
   if (/^\s+$/.test(textNode)) return;
   
-  return this.textConvert(textNode, parent);
+  return this.textConvert(textNode.replace(/\s+/g, " ").trim(), parent);
 };
 
 htmlParser.prototype.tagParse = function (root, name, attributes, children) {

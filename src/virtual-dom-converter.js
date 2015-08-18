@@ -16,7 +16,7 @@ var htmlParse = new htmlParser({
       var hscript = "h(\"" + name + "\""
       + (attributes || properties ? ",{"
       + (attributes ? "attributes:{" + attributes + "}" : "")
-      + (attributes && properties ? ",": "")
+      + (attributes && properties ? "," : "")
       + (properties ? properties.substr(1) : "")
       + "}" : "")
       + (children ? ",[" + children + "]" : "") + ")";
