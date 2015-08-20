@@ -34,27 +34,9 @@ var hscript = html2ths.compile(
 ### api
 
 * [registe helper](#registe-helper)
-* [registe block helper](#registe-block-helper)
 
 #### registe helper
 
-``` js
-var obj = {
-  name: 'world'
-};
-
-html2ths.registerHelper("greeting", function (name) {
-  return 'hello ' + name;
-});
-
-var hscript = html2ths.compile(
-    '<span>{{greeting name}}</span>',
-  h);
-  console.log(hscript(obj).outerHTML);
-  //   <span>hello world</span>
-```
-
-#### registe block helper
 ``` js
 var obj = {
   greeting: {
@@ -128,6 +110,12 @@ var hscript = html2ths.compile(
  * @return {Function} template 
 */
 html2ths.compile(html, h)
+
+/**
+ * @param {String} html
+ * @return {String} template 
+*/
+html2ths.convert(html)
 
 /**
  * @param {String} name
