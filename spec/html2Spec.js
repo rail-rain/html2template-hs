@@ -93,6 +93,7 @@ describe("html2ths", function() {
   });
   
   it('if', function () {
+    
     expect(html2ths.compile(
       '<div>' +
         '{{#if flag}}' +
@@ -179,16 +180,16 @@ describe("html2ths", function() {
       .toBe('<div><span>0</span><span>1</span><span>2</span></div>');
   });
   
-  it('non block helpers', function () {
-    html2ths.registerHelper("space", function (foo, bar) {
-      return foo + ' ' + bar;
-    });
-    
-    expect(html2ths.compile(
-        '<span>{{space array[0] array[1]}}</span>',
-      h)(obj).outerHTML)
-      .toBe('<span>hello world</span>');
-  });
+  // it('non block helpers', function () {
+  //   html2ths.registerHelper("space", function (foo, bar) {
+  //     return foo + ' ' + bar;
+  //   });
+  //   
+  //   expect(html2ths.compile(
+  //       '<span>{{space array[0] array[1]}}</span>',
+  //     h)(obj).outerHTML)
+  //     .toBe('<span>hello world</span>');
+  // });
   
   it('if else', function () {
     expect(html2ths.compile(
@@ -235,10 +236,51 @@ describe("html2ths", function() {
     });
     
     expect(html2ths.compile(
-      '<span>{{gt obj}}</span>',
+      '<span>{{#gt obj}}{{/gt}}</span>',
+      h)(obj).outerHTML)
+      .toBe('<span>hello!</span>');
+  });
+  
+  // it('non block helpers in attributes', function () {
+  //   html2ths.registerHelper("space", function (foo, bar) {
+  //     return foo + ' ' + bar;
+  //   });
+  //   
+  //   expect(html2ths.compile(
+  //       '<span class="{{space array[0] array[1]}}" id="greeting"></span>',
+  //     h)(obj).outerHTML)
+  //     .toBe('<span class="hello world" id="greeting"></span>');
+  // });
+  
+  it('block brother', function () {
+    
+    expect(html2ths.compile(
+      '<div>' +
+        'foo' +
+        '{{#if flag}}' +
+        'bar' +
+          '<span>hello</span>' +
+        'baz' +
+        '{{/if}}' +
+        'qux' +
+        '<span>world</span>' +
+      '</div>',
+      h)(obj).outerHTML)
+      .toBe('<div>fooqux<span>world</span></div>');
+  });
+});
+
+describe('virtual-dom', function () {
+  var html2tvd = require('../virtual-dom.js');
+  var h = require('hyperscript');
+  var obj = {
+    greeting: "hello!"
+  };
+
+  it("base", function() {
+    expect(html2tvd.compile(
+      '<span>{{greeting}}</span>',
       h)(obj).outerHTML)
       .toBe('<span>hello!</span>');
   });
 });
-
-

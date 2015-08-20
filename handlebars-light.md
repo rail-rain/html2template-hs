@@ -31,9 +31,12 @@ var template = Handlebars.compile('<span>{{greeting}}</span>');
 
 ### api
 
-* registe helper
+* [registe helper](#registe-helper)
 * [paths](#paths)
 * [this context](#this-context)
+
+#### registe helper
+  block helper only
 
 #### paths
   bracket syntax and dod syntax only

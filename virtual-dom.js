@@ -3,7 +3,7 @@
 var compiler = require("./src/compiler");
 var virtualDom = require("./src/virtual-dom-converter");
 
-compiler.htmlConvert = virtualDom;
+compiler.htmlConverter = virtualDom;
 
 compiler.setNotAttributes = virtualDom.setNotAttributes;
 
